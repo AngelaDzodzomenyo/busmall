@@ -1,6 +1,6 @@
 'use strict';
 
-console.log('You there?')
+console.log('You there?');
 
 //we have a startup that wants to create focus group app for e-commerce
   //needs group members to be able to pick one out of three items displayed at a time on which item they would most likely purchase. 
@@ -58,18 +58,42 @@ Item.prototype.renderSingleItem = function(img, p) {
 // > make left, middle, right variables
 // render the items
 function randomItems() {
-  let leftIndex = math.foor(math.random * Iten.allItems.length);
-  let middleIndex = math.foor(math.random * Iten.allItems.length);
-  let rightIndex = math.foor(math.random * Iten.allItems.length);
+  let leftIndex = math.foor(math.random() * Iten.allItems.length);
+  // let middleIndex = math.foor(math.random() * Iten.allItems.length);
+  // let rightIndex = math.foor(math.random() * Iten.allItems.length);
 
-  leftItem = Item.allItems(leftIndex)
-  middleItem = Item.allItems(middleIndex)
-  rightItem = Item.allItems(rightIndex)
-  
+  leftItem = Item.allItems[leftIndex];
+
   let middleIndex;
-  while (middleIndex === undefined)
-}
+  let rightIndex;
+  while (leftIndex === undefined || leftIndex === rightIndex || leftIndex === middleIndex) {
+    rightIndex = math.foor(math.random() * Iten.allItems.length);
+    middleIndex = math.foor(math.random() * Iten.allItems.length);
 
+    
+   while (rightIndex === undefined || rightIndex === middleIndex) {
+    middleIndex = math.foor(math.random() * Iten.allItems.length);
+    }
+    middleItem = Item.allItems[middleIndex];
+    rightItem = Item.allItems[rightIndex];
+
+    renderThreeItems(leftItem, middleItem, rightItem);
+  }
+  
+//   let middleIndex;
+//   while (middleIndex === undefined || middleIndex === leftIndex) {
+//     middleIndex = math.foor(math.random * Iten.allItems.length);
+//   }
+//   let rightIndex;
+//   while (rightIndex === undefined || rightIndex === leftIndex) {
+//     rightIndex = math.foor(math.random * Iten.allItems.length);
+//   }
+//   middleItem = Item.allItems[middleIndex];
+//   rightItem = Item.allItems[rightIndex];
+
+//   renderThreeItems(leftItem, middleItem, rightItem)
+// }
+}
 
 
 
@@ -104,11 +128,9 @@ Item.allItems.push(new Item('Water Recycler', './images/water-can.jpg'));
 Item.allItems.push(new Item('Undrinkable Wine Glass', './images/wine-glass.jpg'));
 
 
-renderThreeItems(lettItem, rightItem);
+// renderThreeItems(leftItem, middleItem, rightItem);
 
-
-
-
+randomItems();
 // > For each of the three images, increment its property of times it has been shown by one.
 
 
@@ -139,6 +161,4 @@ renderThreeItems(lettItem, rightItem);
 
 // > Add a button with the text View Results, which when clicked displays the list of all the products followed by the votes received, and number of times seen for each. Example: banana had 3 votes, and was seen 5 times.
 
-// **NOTE: Displayed product names should match the file name for the product. Example: the product represented with dog-duck.jpg should be displayed to the user as exactly “dog-duck” when the results are shown.**
-
-
+// **NOTE: Displayed product names should match the file name for the product. Example: the product represented with dog-duck.jpg should be displayed to the user as exactly “dog-duck” when the results are shown.
