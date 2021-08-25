@@ -56,17 +56,18 @@ allItems.push(new Item('Is it a pen or a fork? Novelty Item', './images/pen.jpg'
 allItems.push(new Item('Tidy Dogs Floor Cleaner', './images/pet-sweep.jpg'));
 allItems.push(new Item('Scissors Nobody Asked For', './images/scissors.jpg'));
 allItems.push(new Item('Sharknado Sleeping Bag', './images/shark.jpg'));
-allItems.push(new Item('Train Them to Clean The House Early! Bodymop!', './images/sweep.jpg'));
+allItems.push(new Item('Train Them to Clean The House Early! Bodymop!', './images/sweep.png'));
 allItems.push(new Item('Jedi Sleeping Bag', './images/tauntaun.jpg'));
 allItems.push(new Item('The Last Unicorn', './images/unicorn.jpg'));
 allItems.push(new Item('Water Recycler', './images/water-can.jpg'));
 allItems.push(new Item('Undrinkable Wine Glass', './images/wine-glass.jpg'));
 allItems.push(new Item('R2D2 Luggage Bag', './images/bag.jpg'));
-// Item.allItems = [];
+// allItems = [];
 
 //put two paramenters: so one is img and the other is <p>. both are reference variables
 
 Item.prototype.renderSingleItem = function(img, p) {
+  console.log('here');
   img.src = this.image;
   p.textContent = this.name;
 }
@@ -77,8 +78,8 @@ Item.prototype.renderSingleItem = function(img, p) {
 // > make left, middle, right variables
 // render the items
 // -------------------
-function makeAnItems(name, image) {
-  Item.allItems.push(new Item(name, image));
+function makeAnItem(name, image) {
+  allItems.push(new Item(name, image));
 }
   // let middleIndex = math.foor(math.random() * Iten.allItems.length);
   // let rightIndex = math.foor(math.random() * Iten.allItems.length);
@@ -86,40 +87,65 @@ function makeAnItems(name, image) {
   
   function renderThreeItems() {
     /// when we refactor consider putting the random equation in a function
-   const index = Math.floor(Math.random() * allItems.length);
-    leftItem = allItems[index];
-    middleItem = allItems[index];
-    rightItem = allItems[index];
+    const leftIndex = Math.floor(Math.random() * allItems.length);
+    let rightIndex = Math.floor(Math.random() * allItems.length);
+    let middleIndex = Math.floor(Math.random() * allItems.length);
+    leftItem = allItems[leftIndex];
+    rightItem = allItems[rightIndex];
+    middleItem = allItems[middleIndex]
 
-    // if (leftItem === middleItem || leftItem === rightItem || middleItem === rightItem){
-    //   renderThreeItems();
-    // }
-    // leftItem.timesShown++;
-    // middleItem.timesShown++;
-    // rightItem.timesShown++;
-    // leftItem.votes++;
-    // middleItem.votes++;
-    // rightItem.votes++;
+    while (rightIndex === leftIndex) {
+      rightIndex = Math.floor(Math.random() * allItems.length);
+      rightItem = allItems[rightIndex];
+    }
+
+    while (middleIndex === leftIndex || middleIndex === rightIndex) {
+      middleIndex = Math.floor(Math.random() * allItems.length);
+      middleItem = allItems[middleIndex]
+
+      
+    }
+
+
+
+    leftItem.renderSingleItem(leftItemImgElem, leftItemPElem);
+    rightItem.renderSingleItem(rightItemImgElem, rightItemPElem);
+    middleItem.renderSingleItem(middleItemImgElem, middleItemPElem);
+
+
+    // // leftItem = allItems[index];
+    // // middleItem = allItems[index];
+    // // rightItem = allItems[index];
+
+    // // // if (leftItem === middleItem || leftItem === rightItem || middleItem === rightItem){
+    // // //   renderThreeItems();
+    // // // }
+    // // // leftItem.timesShown++;
+    // // // middleItem.timesShown++;
+    // // // rightItem.timesShown++;
+    // // // leftItem.votes++;
+    // // // middleItem.votes++;
+    // // // rightItem.votes++;
   
-    leftItemImgElem.src=leftItem.image
-    middleItemImgElem.src=middleItem.image
-    rightItemImgElem.src=rightItem.image
+    // // leftItemImgElem.src=leftItem.image
+    // // middleItemImgElem.src=middleItem.image
+    // // rightItemImgElem.src=rightItem.image
 
     // while (!rightItem || rightItem === leftItem) {
-    //   const rightIndex = Math.floor(Math.random() * Item.allItems.length);
+    //   const rightIndex = Math.floor(Math.random() * allItems.length);
     //   const rightIndex = Math.floor(Math.random() * 10);
-    //   rightItem = Item.allItems[rightIndex];
+    //   rightItem = allItems[rightIndex];
     // }
   
     // while (!centerItem || centerItem === leftItem || centerItem === rightItem) {
-    //   const centerIndex = Math.floor(Math.random() * Item.allItems.length);
-    //   const centerIndex = Math.floor(Math.random() * Item.allItems.length);
-    //   centerItem = Item.allItems[centerIndex];
+    //   const centerIndex = Math.floor(Math.random() * allItems.length);
+    //   const centerIndex = Math.floor(Math.random() * allItems.length);
+    //   centerItem = allItems[centerIndex];
     // }
 
     //render goes here
     // leftItem.renderSingleItem(leftItemImgElem, leftItemPElem);
-    console.log(leftItem);
+  
     // rightItem.renderSingleItem(rightItemImgElem, rightItemPElem);
     // middleItem.renderSingleItem(middleItemImgElem, middleItemPElem);
   } 
@@ -153,11 +179,17 @@ function handleClick(event) {
   const validTargets = [leftItemImgElem, middleItemImgElem, rightItemImgElem]
   if ( validTargets.includes(event.target)) {
     rounds--;
+    for (let i = 0; i < allItems.length; i++) {
+      if ( allItems[i].image === event.target.src){
+        allItems[i].votes+=1
+      }
+    }
+    renderThreeItems();
    }
    if (rounds === 0) {
-    leftItem.removeEventListener('click', handleClick)
-    middleItem.removeEventListener('click', handleClick)
-    rightItem.removeEventListener('click', handleClick)
+    leftItemImgElem.removeEventListener('click', handleClick)
+    middleItemImgElem.removeEventListener('click', handleClick)
+    rightItemImgElem.removeEventListener('click', handleClick)
 
     renderResults();
    }
@@ -174,8 +206,8 @@ function handleClick(event) {
 //   while (rightIndex === undefined || rightIndex === leftIndex) {
 //     rightIndex = math.foor(math.random * Iten.allItems.length);
 //   }
-//   middleItem = Item.allItems[middleIndex];
-//   rightItem = Item.allItems[rightIndex];
+//   middleItem = allItems[middleIndex];
+//   rightItem = allItems[rightIndex];
 
 //   renderThreeItems(leftItem, middleItem, rightItem)
 // }
@@ -205,10 +237,10 @@ function handleClick(event) {
 
 
 // ----------------------------------------- Listener -------------------------------------------- //
-console.log(leftItem);
-leftItem.addEventListener('click', handleClick);
-middleItem.addEventListener('click', handleClick);
-rightItem.addEventListener('click', handleClick);
+
+leftItemImgElem.addEventListener('click', handleClick);
+middleItemImgElem.addEventListener('click', handleClick);
+rightItemImgElem.addEventListener('click', handleClick);
 
 
 
