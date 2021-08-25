@@ -22,7 +22,7 @@ const leftItemPElem = document.getElementById('left_item_p');
 const middleItemImgElem = document.getElementById('middle_item_img');
 const middleItemPElem = document.getElementById('middle_item_p');
 const rightItemImgElem = document.getElementById('right_item_img');
-const rightItemPElem = document.getElementById('right_item_img');
+const rightItemPElem = document.getElementById('right_item_p');
 
 let leftItem = null;
 let rightItem = null;
@@ -30,6 +30,7 @@ let middleItem = null;
 
 let rounds = 25
 
+const allItems = [];
 
 // 1. Create a constructor function that creates an object associated with each product, and has the following properties:
 // Name of the product ---------------> Item
@@ -42,8 +43,26 @@ function Item(name, image) {
   this.votes = 0; 
   //Sara said constructor funciton should only contain things that describe the obkject, so don't ad any other things 
 }
-
-Item.allItems = [];
+allItems.push(new Item('Banana Cutter', './images/banana.jpg'));
+allItems.push(new Item('Tech Toilet Roll Stand', './images/bathroom.jpg'));
+allItems.push(new Item('Rainless boots', './images/boots.jpg'));
+allItems.push(new Item('All-In-One Breakfast', './images/breakfast.jpg'));
+allItems.push(new Item('Meatwad for yo mouf!', './images/bubblegum.jpg'));
+allItems.push(new Item('Chair For Your Enemies', './images/chair.jpg'));
+allItems.push(new Item('Cosmic Entity Figurine', './images/cthulhu.jpg'));
+allItems.push(new Item('"Where is Fiddo?" Doggie Disguise', './images/dog-duck.jpg'));
+allItems.push(new Item('Dragonmeant(Tastes Just Like Cow!)', './images/dragon.jpg'));
+allItems.push(new Item('Is it a pen or a fork? Novelty Item', './images/pen.jpg'));
+allItems.push(new Item('Tidy Dogs Floor Cleaner', './images/pet-sweep.jpg'));
+allItems.push(new Item('Scissors Nobody Asked For', './images/scissors.jpg'));
+allItems.push(new Item('Sharknado Sleeping Bag', './images/shark.jpg'));
+allItems.push(new Item('Train Them to Clean The House Early! Bodymop!', './images/sweep.jpg'));
+allItems.push(new Item('Jedi Sleeping Bag', './images/tauntaun.jpg'));
+allItems.push(new Item('The Last Unicorn', './images/unicorn.jpg'));
+allItems.push(new Item('Water Recycler', './images/water-can.jpg'));
+allItems.push(new Item('Undrinkable Wine Glass', './images/wine-glass.jpg'));
+allItems.push(new Item('R2D2 Luggage Bag', './images/bag.jpg'));
+// Item.allItems = [];
 
 //put two paramenters: so one is img and the other is <p>. both are reference variables
 
@@ -57,29 +76,96 @@ Item.prototype.renderSingleItem = function(img, p) {
 // > Create an algorithm that will randomly generate three unique product images from the images directory and display them side-by-side-by-side in the browser window.
 // > make left, middle, right variables
 // render the items
-function randomItems() {
-  let leftIndex = math.foor(math.random() * Iten.allItems.length);
+// -------------------
+function makeAnItems(name, image) {
+  Item.allItems.push(new Item(name, image));
+}
   // let middleIndex = math.foor(math.random() * Iten.allItems.length);
   // let rightIndex = math.foor(math.random() * Iten.allItems.length);
 
-  leftItem = Item.allItems[leftIndex];
-
-  let middleIndex;
-  let rightIndex;
-  while (leftIndex === undefined || leftIndex === rightIndex || leftIndex === middleIndex) {
-    rightIndex = math.foor(math.random() * Iten.allItems.length);
-    middleIndex = math.foor(math.random() * Iten.allItems.length);
-
-    
-   while (rightIndex === undefined || rightIndex === middleIndex) {
-    middleIndex = math.foor(math.random() * Iten.allItems.length);
-    }
-    middleItem = Item.allItems[middleIndex];
-    rightItem = Item.allItems[rightIndex];
-
-    renderThreeItems(leftItem, middleItem, rightItem);
-  }
   
+  function renderThreeItems() {
+    /// when we refactor consider putting the random equation in a function
+   const index = Math.floor(Math.random() * allItems.length);
+    leftItem = allItems[index];
+    middleItem = allItems[index];
+    rightItem = allItems[index];
+
+    // if (leftItem === middleItem || leftItem === rightItem || middleItem === rightItem){
+    //   renderThreeItems();
+    // }
+    // leftItem.timesShown++;
+    // middleItem.timesShown++;
+    // rightItem.timesShown++;
+    // leftItem.votes++;
+    // middleItem.votes++;
+    // rightItem.votes++;
+  
+    leftItemImgElem.src=leftItem.image
+    middleItemImgElem.src=middleItem.image
+    rightItemImgElem.src=rightItem.image
+
+    // while (!rightItem || rightItem === leftItem) {
+    //   const rightIndex = Math.floor(Math.random() * Item.allItems.length);
+    //   const rightIndex = Math.floor(Math.random() * 10);
+    //   rightItem = Item.allItems[rightIndex];
+    // }
+  
+    // while (!centerItem || centerItem === leftItem || centerItem === rightItem) {
+    //   const centerIndex = Math.floor(Math.random() * Item.allItems.length);
+    //   const centerIndex = Math.floor(Math.random() * Item.allItems.length);
+    //   centerItem = Item.allItems[centerIndex];
+    // }
+
+    //render goes here
+    // leftItem.renderSingleItem(leftItemImgElem, leftItemPElem);
+    console.log(leftItem);
+    // rightItem.renderSingleItem(rightItemImgElem, rightItemPElem);
+    // middleItem.renderSingleItem(middleItemImgElem, middleItemPElem);
+  } 
+
+  function renderResults() {
+    const resultsElem = document.getElementById('results');
+    resultsElem.innerHTML = '';
+    for (let item of allItems) {
+      const liElem = document.createElement('li');
+      liElem.textContent = `${item.name} was shown ${item.timesShown} times and was clicked ${item.timesClicked} times.`;
+      resultsElem.appendChild(liElem);  
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+  renderThreeItems(); 
+  
+
+function handleClick(event) {
+  console.log(event.target);
+  const validTargets = [leftItemImgElem, middleItemImgElem, rightItemImgElem]
+  if ( validTargets.includes(event.target)) {
+    rounds--;
+   }
+   if (rounds === 0) {
+    leftItem.removeEventListener('click', handleClick)
+    middleItem.removeEventListener('click', handleClick)
+    rightItem.removeEventListener('click', handleClick)
+
+    renderResults();
+   }
+}  
+
+
+// --------------------
+
 //   let middleIndex;
 //   while (middleIndex === undefined || middleIndex === leftIndex) {
 //     middleIndex = math.foor(math.random * Iten.allItems.length);
@@ -93,44 +179,39 @@ function randomItems() {
 
 //   renderThreeItems(leftItem, middleItem, rightItem)
 // }
-}
 
-
-
-function renderThreeItems(leftItem, middleItem, rightItem) {
- leftItem.renderSingleItem (leftItemImgElem, leftItemPElem);
-  middleItem.renderSingleItem (middleItemImgElem, middleItemPElem);
-  rightItem.renderSingleItem (rightItemImgElem, rightItemPElem)
-}
+// -----------
 
 
 
 
+// function renderThreeItems(leftItem, middleItem, rightItem) {
+//  leftItem.renderSingleItem (leftItemImgElem, leftItemPElem);
+//   middleItem.renderSingleItem (middleItemImgElem, middleItemPElem);
+//   rightItem.renderSingleItem (rightItemImgElem, rightItemPElem)
+// }
 
-Item.allItems.push(new Item('R2D2 Luggage Bag', './images/bag.jpg'));
-Item.allItems.push(new Item('Banana Cutter', './images/banana.jpg'));
-Item.allItems.push(new Item('Tech Toilet Roll Stand', './images/bathroom.jpg'));
-Item.allItems.push(new Item('Yellow Rainboots', './images/boots.jpg'));
-Item.allItems.push(new Item('All-In-One Breakfast', './images/breakfast.jpg'));
-Item.allItems.push(new Item('Meatwad for yo mouf!', './images/bubblegum.jpg'));
-Item.allItems.push(new Item('Chair For Your Enemies', './images/chair.jpg'));
-Item.allItems.push(new Item('Cosmic Entity Figurine', './images/cthulhu.jpg'));
-Item.allItems.push(new Item('"Where is Fiddo?" Doggie Disguise', './images/dog-duck.jpg'));
-Item.allItems.push(new Item('Dragonmeant(Tastes Just Like Cow!)', './images/dragon.jpg'));
-Item.allItems.push(new Item('Is it a pen or a fork? Novelty Item', './images/pen.jpg'));
-Item.allItems.push(new Item('Tidy Dogs Floor Cleaner', './images/pet-sweep.jpg'));
-Item.allItems.push(new Item('Scissors Nobody Asked For', './images/scissors.jpg'));
-Item.allItems.push(new Item('Sharknado Sleeping Bag', './images/shark.jpg'));
-Item.allItems.push(new Item('Train Them to Clean The House Early! Bodymop!', './images/sweep.jpg'));
-Item.allItems.push(new Item('Jedi Sleeping Bag', './images/tauntaun.jpg'));
-Item.allItems.push(new Item('The Last Unicorn', './images/unicorn.jpg'));
-Item.allItems.push(new Item('Water Recycler', './images/water-can.jpg'));
-Item.allItems.push(new Item('Undrinkable Wine Glass', './images/wine-glass.jpg'));
+
+
+
+
+
 
 
 // renderThreeItems(leftItem, middleItem, rightItem);
 
-randomItems();
+
+
+
+
+// ----------------------------------------- Listener -------------------------------------------- //
+console.log(leftItem);
+leftItem.addEventListener('click', handleClick);
+middleItem.addEventListener('click', handleClick);
+rightItem.addEventListener('click', handleClick);
+
+
+
 // > For each of the three images, increment its property of times it has been shown by one.
 
 
