@@ -70,6 +70,8 @@ Item.prototype.renderSingleItem = function(img, p) {
   console.log('here');
   img.src = this.image;
   p.textContent = this.name;
+  this.timesShown++;
+  this.votes++;
 }
 
 //************************************ Global Function ********************************/
@@ -149,6 +151,70 @@ function makeAnItem(name, image) {
     // rightItem.renderSingleItem(rightItemImgElem, rightItemPElem);
     // middleItem.renderSingleItem(middleItemImgElem, middleItemPElem);
   } 
+// put chart function here:
+// how many votes did each item get?
+
+
+
+  function renderChart() {
+
+
+  const itemData = [];
+  const itemLabels = [];
+
+  for (let i = 0; i < allItems.length; i++) {
+    let item = allItems[i];
+    itemData.push(item.votes);
+    itemLabels.push(item.name);
+  }
+
+
+    var ctx = document.getElementById('itemChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: itemLabels,
+        datasets: [{
+            label: '# of Votes',
+            data: itemData,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+  }
+
+
+ 
+
+
+
+
+
+
+
 
   function renderResults() {
     const resultsElem = document.getElementById('results');
@@ -172,7 +238,7 @@ function makeAnItem(name, image) {
 
 
   renderThreeItems(); 
-  
+ 
 // ----------------------------------------------
 // function handleClick(event) {
 //   console.log(event.target);
@@ -219,8 +285,10 @@ function handleClick(event) {
       // render results
       alert('Thank you for participating!');
       renderResults();
+      renderChart();
     } else {
       renderThreeItems();
+      
     }
   }
   // count down rounds if they clicked on a valid target
@@ -308,3 +376,4 @@ rightItemImgElem.addEventListener('click', handleClick);
 // > Add a button with the text View Results, which when clicked displays the list of all the products followed by the votes received, and number of times seen for each. Example: banana had 3 votes, and was seen 5 times.
 
 // **NOTE: Displayed product names should match the file name for the product. Example: the product represented with dog-duck.jpg should be displayed to the user as exactly “dog-duck” when the results are shown.
+
