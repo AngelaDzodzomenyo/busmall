@@ -28,7 +28,7 @@ let leftItem = null;
 let rightItem = null;
 let middleItem = null;
 
-let rounds = 25
+let rounds = 25;
 
 const allItems = [];
 
@@ -155,7 +155,7 @@ function makeAnItem(name, image) {
     resultsElem.innerHTML = '';
     for (let item of allItems) {
       const liElem = document.createElement('li');
-      liElem.textContent = `${item.name} was shown ${item.timesShown} times and was clicked ${item.timesClicked} times.`;
+      liElem.textContent = `${item.name} was shown ${item.timesShown} times and was clicked ${item.votes} times.`;
       resultsElem.appendChild(liElem);  
     }
   }
@@ -173,30 +173,63 @@ function makeAnItem(name, image) {
 
   renderThreeItems(); 
   
+// ----------------------------------------------
+// function handleClick(event) {
+//   console.log(event.target);
+//   const validTargets = [leftItemImgElem, middleItemImgElem, rightItemImgElem]
+//   if ( validTargets.includes(event.target)) {
+//     rounds--;
+//     for (let i = 0; i < allItems.length; i++) {
+//       if ( allItems[i].image === event.target.src){
+//         allItems[i].votes+=1
+//       }
+//     }
+//     renderThreeItems();
+//    }
+//    if (rounds === 0) {
+//     leftItemImgElem.removeEventListener('click', handleClick)
+//     middleItemImgElem.removeEventListener('click', handleClick)
+//     rightItemImgElem.removeEventListener('click', handleClick)
 
-function handleClick(event) {
-  console.log(event.target);
-  const validTargets = [leftItemImgElem, middleItemImgElem, rightItemImgElem]
-  if ( validTargets.includes(event.target)) {
-    rounds--;
-    for (let i = 0; i < allItems.length; i++) {
-      if ( allItems[i].image === event.target.src){
-        allItems[i].votes+=1
-      }
-    }
-    renderThreeItems();
-   }
-   if (rounds === 0) {
-    leftItemImgElem.removeEventListener('click', handleClick)
-    middleItemImgElem.removeEventListener('click', handleClick)
-    rightItemImgElem.removeEventListener('click', handleClick)
-
-    renderResults();
-   }
-}  
+//     renderResults();
+//    }
+// }  
 
 
 // --------------------
+
+function handleClick(event) {
+  console.log(event.target);
+  const validTargets = [leftItemImgElem, middleItemImgElem, rightItemImgElem];
+  if (validTargets.includes(event.target)) {
+    rounds--;
+    if (event.target === validTargets[0]) {
+      validTargets[0].votes++;
+    } else if (event.target === validTargets[1]) {
+      validTargets[1].votes++;
+    } else {
+      validTargets[2].votes++;
+    }
+    if (rounds === 0) {
+      //if they are out of rounds render the results and turn off the listener
+      leftItemImgElem.removeEventListener('click', handleClick);
+      middleItemImgElem.removeEventListener('click', handleClick);
+      rightItemImgElem.removeEventListener('click', handleClick);
+
+      // render results
+      alert('Thank you for participating!');
+      renderResults();
+    } else {
+      renderThreeItems();
+    }
+  }
+  // count down rounds if they clicked on a valid target
+  // update votes on the correct target
+  // if they are out of rounds render the results and turn off the listener
+  // else get three new things to vote on
+}
+
+//------------------------
 
 //   let middleIndex;
 //   while (middleIndex === undefined || middleIndex === leftIndex) {
