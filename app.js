@@ -43,38 +43,69 @@ function Item(name, image) {
   this.votes = 0; 
   //Sara said constructor funciton should only contain things that describe the obkject, so don't ad any other things 
 }
-allItems.push(new Item('Banana Cutter', './images/banana.jpg'));
-allItems.push(new Item('Tech Toilet Roll Stand', './images/bathroom.jpg'));
-allItems.push(new Item('Rainless boots', './images/boots.jpg'));
-allItems.push(new Item('All-In-One Breakfast', './images/breakfast.jpg'));
-allItems.push(new Item('Meatwad for yo mouf!', './images/bubblegum.jpg'));
-allItems.push(new Item('Chair For Your Enemies', './images/chair.jpg'));
-allItems.push(new Item('Cosmic Entity Figurine', './images/cthulhu.jpg'));
-allItems.push(new Item('"Where is Fiddo?" Doggie Disguise', './images/dog-duck.jpg'));
-allItems.push(new Item('Dragonmeant(Tastes Just Like Cow!)', './images/dragon.jpg'));
-allItems.push(new Item('Is it a pen or a fork? Novelty Item', './images/pen.jpg'));
-allItems.push(new Item('Tidy Dogs Floor Cleaner', './images/pet-sweep.jpg'));
-allItems.push(new Item('Scissors Nobody Asked For', './images/scissors.jpg'));
-allItems.push(new Item('Sharknado Sleeping Bag', './images/shark.jpg'));
-allItems.push(new Item('Train Them to Clean The House Early! Bodymop!', './images/sweep.png'));
-allItems.push(new Item('Jedi Sleeping Bag', './images/tauntaun.jpg'));
-allItems.push(new Item('The Last Unicorn', './images/unicorn.jpg'));
-allItems.push(new Item('Water Recycler', './images/water-can.jpg'));
-allItems.push(new Item('Undrinkable Wine Glass', './images/wine-glass.jpg'));
-allItems.push(new Item('R2D2 Luggage Bag', './images/bag.jpg'));
+
+
+
+function createItems(){
+  // localStorage.setItem("items","Angela")
+  console.log(localStorage);
+  let storedItems = localStorage.getItem("items");
+  console.log(storedItems);
+  if (storedItems === null){
+    allItems.push(new Item('Banana Cutter', './images/banana.jpg'));
+    allItems.push(new Item('Tech Toilet Roll Stand', './images/bathroom.jpg'));
+    allItems.push(new Item('Rainless boots', './images/boots.jpg'));
+    allItems.push(new Item('All-In-One Breakfast', './images/breakfast.jpg'));
+    allItems.push(new Item('Meatball Bubblegum!', './images/bubblegum.jpg'));
+    allItems.push(new Item('Chair For Your Enemies', './images/chair.jpg'));
+    allItems.push(new Item('Cosmic Entity Figurine', './images/cthulhu.jpg'));
+    allItems.push(new Item('"Where is Fiddo?" Doggie Disguise', './images/dog-duck.jpg'));
+    allItems.push(new Item('Dragonmeant(Tastes Just Like Cow!)', './images/dragon.jpg'));
+    allItems.push(new Item('Is it a pen or a fork? Novelty Item', './images/pen.jpg'));
+    allItems.push(new Item('Tidy Dogs Floor Cleaner', './images/pet-sweep.jpg'));
+    allItems.push(new Item('Scissors Nobody Asked For', './images/scissors.jpg'));
+    allItems.push(new Item('Sharknado Sleeping Bag', './images/shark.jpg'));
+    allItems.push(new Item('Train Them to Clean The House Early! Bodymop!', './images/sweep.png'));
+    allItems.push(new Item('Jedi Sleeping Bag', './images/tauntaun.jpg'));
+    allItems.push(new Item('The Last Unicorn', './images/unicorn.jpg'));
+    allItems.push(new Item('Water Recycler', './images/water-can.jpg'));
+    allItems.push(new Item('Undrinkable Wine Glass', './images/wine-glass.jpg'));
+    allItems.push(new Item('R2D2 Luggage Bag', './images/bag.jpg'));
+
+  } 
+
+  else {
+    let parseItems = JSON.parse(storedItems);
+    for ( let i = 0; i < parseItems.length; i++){
+      let item =  parseItems[i];
+      let newItem = new Item(item.name, item.image)
+      allItems.push(newItem)
+      newItem.votes = item.votes
+      newItem.timesShown = item.timesShown
+    }
+
+      
+     
+
+  }
+}
+createItems();
+
+
+
 // allItems = [];
 
 //put two paramenters: so one is img and the other is <p>. both are reference variables
 
 Item.prototype.renderSingleItem = function(img, p) {
-  console.log('here');
+  // console.log('here');
   img.src = this.image;
   p.textContent = this.name;
   this.timesShown++;
-  this.votes++;
 }
 
 //************************************ Global Function ********************************/
+
 
 // > Create an algorithm that will randomly generate three unique product images from the images directory and display them side-by-side-by-side in the browser window.
 // > make left, middle, right variables
@@ -265,16 +296,18 @@ var myChart = new Chart(ctx, {
 // --------------------
 
 function handleClick(event) {
-  console.log(event.target);
+  // console.log(event.target);
   const validTargets = [leftItemImgElem, middleItemImgElem, rightItemImgElem];
   if (validTargets.includes(event.target)) {
+    console.log(event.target);
+    console.log(validTargets[0]);
     rounds--;
     if (event.target === validTargets[0]) {
-      validTargets[0].votes++;
+      leftItem.votes++;
     } else if (event.target === validTargets[1]) {
-      validTargets[1].votes++;
-    } else {
-      validTargets[2].votes++;
+      middleItem.votes++;
+    } else if (event.target === validTargets[2]){
+      rightItem.votes++;
     }
     if (rounds === 0) {
       //if they are out of rounds render the results and turn off the listener
@@ -283,6 +316,8 @@ function handleClick(event) {
       rightItemImgElem.removeEventListener('click', handleClick);
 
       // render results
+      let stringItems = JSON.stringify(allItems);
+      localStorage.setItem("items",stringItems);
       alert('Thank you for participating!');
       renderResults();
       renderChart();
